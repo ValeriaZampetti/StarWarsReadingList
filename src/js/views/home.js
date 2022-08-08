@@ -1,15 +1,51 @@
-import React from "react";
-import rigoImage from "../../img/rigo-baby.jpg";
+import React, { useContext } from "react";
 import "../../styles/home.css";
+import { Card } from "../component/Card";
+import { CardsCarousel } from "../component/CardsCarousel";
+import { Context } from "../store/appContext";
 
-export const Home = () => (
-	<div className="text-center mt-5">
-		<h1>Hello Rigo!</h1>
-		<p>
-			<img src={rigoImage} />
-		</p>
-		<a href="#" className="btn btn-success">
-			If you see this green button, bootstrap is working
-		</a>
-	</div>
-);
+export const Home = () => {
+	const {store, actions} = useContext(Context)
+	return (
+		<div className="text-center mt-5">
+			<CardsCarousel title={"Characters"}>
+				{store.characters.map(
+					(character) => {
+						return (
+							<Card
+									key={character.uid}
+									item={character}
+									resource={"characters"}
+								/>
+						)
+					}
+				)}
+			</CardsCarousel>
+			<CardsCarousel title={"Planets"}>
+					{store.planets.map(
+						planet => {
+							return (
+								<Card
+									key={planet.uid}
+									item={planet}
+									resource={"planets"}
+								/>
+							)
+						}
+					)}
+			</CardsCarousel>
+			<CardsCarousel title={"Vehicles"}>
+				{store.vehicles.map(vehicle =>{
+					return (
+						<Card 
+							key={vehicle.uid}
+							item={vehicle}
+							resource={"vehicles"}
+						/>
+					)
+				} )}
+			</CardsCarousel>
+		</div>
+	)
+};
+Footer
