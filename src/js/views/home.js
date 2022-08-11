@@ -1,50 +1,54 @@
 import React, { useContext } from "react";
 import "../../styles/home.css";
-import { Card } from "../component/Card";
-import { CardsCarousel } from "../component/CardsCarousel";
 import { Context } from "../store/appContext";
+import { Card } from "./Card";
 
 export const Home = () => {
-	const {store, actions} = useContext(Context)
+	const {store, actions} = useContext(Context);
 	return (
-		<div className="text-center mt-5">
-			<CardsCarousel title={"Characters"}>
-				{store.characters.map(
-					(character) => {
-						return (
-							<Card
-									key={character.uid}
-									item={character}
-									resource={"characters"}
-								/>
-						)
-					}
-				)}
-			</CardsCarousel>
-			<CardsCarousel title={"Planets"}>
-					{store.planets.map(
-						planet => {
-							return (
-								<Card
-									key={planet.uid}
-									item={planet}
-									resource={"planets"}
-								/>
-							)
-						}
-					)}
-			</CardsCarousel>
-			<CardsCarousel title={"Vehicles"}>
-				{store.vehicles.map(vehicle =>{
+	<div className="container">
+		<div className="container m-2">
+			<h2 className="text-warning">Character</h2>
+			<div className="d-flex flex-nowrap scroll ">
+				{store.people.map((item, index)=>{
 					return (
-						<Card 
-							key={vehicle.uid}
-							item={vehicle}
-							resource={"vehicles"}
-						/>
-					)
-				} )}
-			</CardsCarousel>
+					<Card 
+					key={item.uid}
+					item={item}
+					resource="people"/>
+				);
+				}
+			)}
+			</div>
 		</div>
-	)
-};
+		<div className="container m-2">
+			<h2 className="text-warning">Planets</h2>
+			<div className="d-flex flex-nowrap scroll">
+				{store.planets.map((item, index)=>{
+					return (
+					<Card 
+					key={item.uid}
+					item={item}
+					resource="planets"/>
+				);
+				}
+			)}
+			</div>
+		</div>
+		<div className="container  m-2">
+			<h2 className="text-warning">Starships</h2>
+			<div className="d-flex flex-nowrap scroll ">
+				{store.starships.map((item, index)=>{
+					return (
+					<Card 
+					key={item.uid}
+					item={item}
+					resource="starships"/>
+				);
+				}
+			)}
+			</div>
+		</div>
+	</div>
+);
+} 

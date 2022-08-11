@@ -1,55 +1,81 @@
-import { element } from "prop-types";
-
-const API_URL = "https://www.swapi.tech/api/"
+const API_URL = "https://www.swapi.tech/api"
 
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			characters: [],
+			people: [],
 			planets: [],
-			vehicles: []
+			starships: [],
+			singleItem: {},
+			favorites: [],
+			heartButton: "outline-",
 		},
 		actions: {
-			updateResourceList: async (resource, list) => {
-				const resourceList = await getResources(resource)
-				// for(element of resourceList) {
-				// 	const details = await getResources(`${resource}/${element.uid}`, true)
-				// 	element.details = details
-				// }
+			getItems: async (resource) => {
+				try {
+					const response = await fetch(
+					`${API_URL}/${resource}/?page=1&limit=82`
+					);
+					const body = await response.json();
+					if(response.status !== 200) {
+						alert("no pudimos cargar items");
+						return;
+					}
+					setStore({
+						[`${resource}`]: body.results,
+					})
+				} catch (error) {
+					alert("servidor caido")
+				}
+			},
+			getSingleItem: async (resource, uid) => {
+				try {
+					const response = await fetch(
+						`${API_URL}/${resource}/${uid}`
+					);
+					const body = await response.json();
+					if (response.status !== 200){
+						alert("no pudimos cargar personajes");
+						return;
+					}
+					setStore({
+						singleItem: {
+							...body.result.properties, 
+							uid: body.result.uid,
+							description: body.result.description,
+						}				
+					})
+				} catch (error) {
+					alert("promesa rechazada, servidor caido")
+				}
+			},
+			removeSingleItem: async(resource) => {
 				setStore({
-					[list]: resourceList
+					singleItem: ""
 				})
 			},
-			updateAllLists: async () =>{
-				const actions = getActions()
-				await actions.updateResourceList('people', 'characters')
-				await actions.updateResourceList('planets', 'planets')
-				await actions.updateResourceList('vehicles', 'vehicles')
+			addFavorites: (resource) => {
+				const store = getStore()
+				if (store.favorites.find(favorite => favorite.name == resource.name)) return
+				setStore({
+					favorites: [...store.favorites, resource]
+				})
+			},
+			deleteFavorites: (resource) => {
+				setStore({
+					favorites: [...getStore().favorites.filter((item, index)=>{
+						if (resource.name !== item.name) return true;
+					})]
+				})
+			}, 
+			holdHeartButton: () => {
+				setStore({
+					heartButton: "",
+				}
+				)
 			}
 		}
 	};
 };
-
-async function getResources(resource, detalis = false) {
-	try {
-		const response = await fetch(
-		`${API_URL}${resource}`
-	)
-	const body = await response.json()
-	if (response.status !==200) {
-		alert(`no pudimos cargar los ${resource}`)
-		return
-	}	
-		if (detalis) {
-			return body.result
-		}
-		return body.results
-	}
-	catch(error) {
-		alert("fallamos ='(")
-		console.log(error)
-	} 
-}
-
 
 export default getState;

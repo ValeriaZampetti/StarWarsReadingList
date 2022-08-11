@@ -1,0 +1,39 @@
+.imagen {
+    width: 220px;
+    height: 110px;
+    background-color: transparent;
+}
+
+body{
+    background-image: url("https://cdn.pixabay.com/photo/2016/01/27/15/25/space-1164579_1280.png");
+}
+
+.scroll {
+    overflow-x: scroll;
+}
+
+.trasH span {
+display: none;
+cursor: pointer;
+}
+
+button:active {
+    transform: translateY(4px);
+}
+
+.trasH:hover span {
+    display: flex;
+}
+.trasH:active span {
+    transform: translateY(4px);
+}
+
+.circulo {
+    border-radius: 50%;
+    background-color: gainsboro;
+    width: 25px;
+}
+
+.dd-items {
+    align-items: center;
+}
